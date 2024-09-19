@@ -1,23 +1,41 @@
+import pygame
 import random
+import sys
+
+pygame.init()
+
+width, height = 300, 300
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Tic Tac Toe")
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
 
 board = [' ' for _ in range(10)]
+font = pygame.font.Font(None, 100)
+
+def draw_grid():
+    screen.fill(WHITE)
+    pygame.draw.line(screen, BLACK, (100, 0), (100, 300), 5)
+    pygame.draw.line(screen, BLACK, (200, 0), (200, 300), 5)
+    pygame.draw.line(screen, BLACK, (0, 100), (300, 100), 5)
+    pygame.draw.line(screen, BLACK, (0, 200), (300, 200), 5)
+
+def draw_move(letter, pos):
+    x = (pos - 1) % 3 * 100 + 50
+    y = (pos - 1) // 3 * 100 + 50
+    label = font.render(letter, True, RED if letter == 'X' else BLUE)
+    label_rect = label.get_rect(center=(x, y))
+    screen.blit(label, label_rect)
 
 def insert_letter(letter, pos):
     board[pos] = letter
+    draw_move(letter, pos)
 
 def is_space_free(pos):
     return board[pos] == ' '
-
-def print_board(board):
-    print('   |   |')
-    print(' ' + board[1] + ' | ' + board[2] + ' | ' + board[3] + ' ')
-    print('   |   |')
-    print('-----------')
-    print(' ' + board[4] + ' | ' + board[5] + ' | ' + board[6] + ' ')
-    print('   |   |')
-    print('-----------')
-    print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9] + ' ')
-    print('   |   |')
 
 def is_winner(bo, le):
     return (bo[7] == le and bo[8] == le and bo[9] == le) or \
@@ -29,22 +47,6 @@ def is_winner(bo, le):
            (bo[3] == le and bo[5] == le and bo[7] == le) or \
            (bo[1] == le and bo[5] == le and bo[9] == le)
 
-def player_move():
-    run = True
-    while run:
-        move = input('Please select a position to place an X (1-9): ')
-        try:
-            move = int(move)
-            if move > 0 and move < 10:
-                if is_space_free(move):
-                    run = False
-                    insert_letter('X', move)
-                else:
-                    print('Place occupied')
-            else:
-                print('Please type a number in the range (1-9)')
-        except:
-            print('Please type a number')
 
 def is_board_full(board):
     return board.count(' ') <= 1
@@ -60,52 +62,61 @@ def comp_move():
             if is_winner(board_copy, let):
                 move = i
                 return move
-    
+
     corners_open = [i for i in possible_moves if i in [1, 3, 7, 9]]
     if corners_open:
-        move = select_random(corners_open)
+        move = random.choice(corners_open)
         return move
-    
+
     if 5 in possible_moves:
         move = 5
         return move
-    
+
     edges_open = [i for i in possible_moves if i in [2, 4, 6, 8]]
     if edges_open:
-        move = select_random(edges_open)
+        move = random.choice(edges_open)
         return move
-    
     return move
 
-def select_random(li):
-    return random.choice(li)
+def player_move(pos):
+    if is_space_free(pos):
+        insert_letter('X', pos)
+        if is_winner(board, 'X'):
+            end_game("Vous avez gagné !")
+        else:
+            move = comp_move()
+            if move != 0:
+                insert_letter('O', move)
+                if is_winner(board, 'O'):
+                    end_game("L'ordinateur a gagné !")
+            if is_board_full(board):
+                end_game("Match nul !")
+
+
+def end_game(message):
+    print(message)
+    pygame.time.delay(2000)
+    pygame.quit()
+    sys.exit()
+
+def get_pos_from_click(x, y):
+    row = y // 100
+    col = x // 100
+    return row * 3 + col + 1
 
 def main():
-    print("Welcome to AI Tic Tac Toe!")
-    print_board(board)
+    draw_grid()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                pos = get_pos_from_click(x, y)
+                player_move(pos)
 
-    while not is_board_full(board):
-        if not is_winner(board, 'O'):
-            player_move()
-            print_board(board)
-        else:
-            print('O won!')
-            break
-        
-        if not is_winner(board, 'X'):
-            move = comp_move()
-            if move == 0:
-                break
-            else:
-                insert_letter('O', move)
-                print(f'Computer placed an O in position {move}')
-                print_board(board)
-        else:
-            print('X won!')
-            break
-    
-    if is_board_full(board) and not is_winner(board, 'X') and not is_winner(board, 'O'):
-        print('Tie Game!')
+        pygame.display.update()
 
 if __name__ == "__main__":
     main()
