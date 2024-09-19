@@ -82,15 +82,15 @@ def player_move(pos):
     if is_space_free(pos):
         insert_letter('X', pos)
         if is_winner(board, 'X'):
-            end_game("Vous avez gagné !")
+            end_game("You won !")
         else:
             move = comp_move()
             if move != 0:
                 insert_letter('O', move)
                 if is_winner(board, 'O'):
-                    end_game("L'ordinateur a gagné !")
+                    end_game("Computer won ! (cheh)")
             if is_board_full(board):
-                end_game("Match nul !")
+                end_game("Tie !")
 
 
 def end_game(message):
