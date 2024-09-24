@@ -6,8 +6,11 @@ Here's a simple implementation of Tic-Tac-Toe with a basic AI.
 ## Features:
 
 1-player mode against the AI
+
 AI algorithm using the Minimax method
+
 Automatic detection of winners/tie
+
 Simple and intuitive game board
 
 ## Prerequisites
