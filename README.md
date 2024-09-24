@@ -5,10 +5,9 @@ Here's a simple implementation of Tic-Tac-Toe with a basic AI.
 
 ## Features:
 
-Command-line interface
 1-player mode against the AI
-AI algorithm using the Minimax method for optimal play
-Automatic detection of winners or draws
+AI algorithm using the Minimax method
+Automatic detection of winners/tie
 Simple and intuitive game board
 
 ## Prerequisites
@@ -23,23 +22,13 @@ Before running the game, make sure you have Python 3.x installed on your machine
 
 ## How to Play
 
--The game starts by displaying an empty grid numbered from 1 to 9.
+-The game starts by displaying an empty grid.
 -Each player (human and AI) takes turns selecting a square to place their symbol (X or O).
--To choose a square, enter the number corresponding to the grid position.
-
-Example of the initial grid:
-
-
-1 | 2 | 3
----------
-4 | 5 | 6
----------
-7 | 8 | 9
+-To choose a square, just click on it.
 
 The AI automatically plays after the player’s turn.
 The first player to align three symbols horizontally, vertically, or diagonally wins the game.
 If the grid is filled and no one has won, the game is declared a draw.
 
 ## To-do
--Graphical interface
 -3 levels of difficulty
