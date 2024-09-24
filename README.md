@@ -17,7 +17,7 @@ Before running the game, make sure you have Python 3.x installed on your machine
 
 ## Installation
 
-    git clone https://github.com/username/tic-tac-toe-ai.git
+    git clone git@github.com:PierreKern/AI-Python-Tic-Tac-Toe.git
     cd tic-tac-toe-ai
     python main.py
 
